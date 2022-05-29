@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+var PanoidDoesNotExistError = errors.New("panoid does not exist!")
 const URL string = "https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=%v&x=%d&y=%d&zoom=%d&nbt=1&fover=2"
 
 func getURL(panoid string, x, y, zoom int) string {
@@ -26,7 +27,7 @@ func GetGeneration(panoid string) (int, error) {
 	}
 
 	if resp.StatusCode == 400 {
-		return 0, errors.New("panoid does not exist!")
+		return 0, PanoidDoesNotExistError
 	}
 
 	// detects gen 1

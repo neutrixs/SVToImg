@@ -1,8 +1,6 @@
 package api
 
 import (
-	"errors"
-	"fmt"
 	"testing"
 )
 
@@ -14,12 +12,10 @@ func TestGetGeneration(t *testing.T) {
 	var wantErr error
 
 	panoid = "invalidID"
-	want, wantErr = 0, errors.New("panoid does not exist!")
+	want, wantErr = 0, PanoidDoesNotExistError
 	got, gotErr = GetGeneration(panoid)
 
-	fmt.Println(gotErr)
-
-	if got != want || gotErr.Error() != wantErr.Error() {
+	if got != want || gotErr != wantErr {
 		t.Fatalf(`getGeneration("%v") = %v, %v, want match for %v, %v`, panoid, got, gotErr, 0, wantErr)
 	}
 
