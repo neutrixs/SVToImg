@@ -7,9 +7,10 @@ import (
 )
 
 var PanoidDoesNotExistError = errors.New("panoid does not exist!")
-const URL string = "https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=%v&x=%d&y=%d&zoom=%d&nbt=1&fover=2"
 
 func getURL(panoid string, x, y, zoom int) string {
+	const URL string = "https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=%v&x=%d&y=%d&zoom=%d&nbt=1&fover=2"
+	
 	return fmt.Sprintf(URL, panoid, x, y, zoom)
 }
 
