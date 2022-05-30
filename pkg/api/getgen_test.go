@@ -38,7 +38,7 @@ func TestGetGeneration(t *testing.T) {
 	}
 
 	// gen 3 panoid
-	// temporarily, this should return 2 (because they have the same x length)
+	// this should returns 2 because IT HAS THE EXACT SAME RESOLUTION AS GEN 2
 	panoid = "ga9K9_YYEwxb4p5ApmQSkA"
 	got, gotErr = GetGeneration(panoid)
 	want, wantErr = 2, nil
