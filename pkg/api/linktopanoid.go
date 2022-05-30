@@ -33,8 +33,9 @@ func ShortlinkToPanoid(url string) (string, error){
 
 	var splitted []string
 
-	// wtf?
+	// WTF?
 	// when you first click the blue line, it's 3m7 and 3m5, but once you move, it becomes 3m6 and 3m4
+	// AND FOR UNOFFICIAL, when you first open, it's 3m8 and 3m6, once you move it's 3m7 and 3m5
 	regex := regexp.MustCompile(`\/data=!3m[0-9]!1e1!3m[0-9]!1s`)
 
 	splitted = regex.Split(finalURL, -1)
