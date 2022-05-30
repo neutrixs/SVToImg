@@ -3,6 +3,7 @@ package api
 import (
 	"errors"
 	"net/http"
+	"regexp"
 	"strings"
 )
 
@@ -32,7 +33,11 @@ func ShortlinkToPanoid(url string) (string, error){
 
 	var splitted []string
 
-	splitted = strings.Split(finalURL, "/data=!3m6!1e1!3m4!1s")
+	// wtf?
+	// when you first click the blue line, it's 3m7 and 3m5, but once you move, it becomes 3m6 and 3m4
+	regex := regexp.MustCompile(`\/data=!3m[0-9]!1e1!3m[0-9]!1s`)
+
+	splitted = regex.Split(finalURL, -1)
 
 	if len(splitted) < 2 {
 		return "", InvalidSVURLError
