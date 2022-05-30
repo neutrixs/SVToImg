@@ -42,7 +42,7 @@ func GetGeneration(panoid string) (int, error) {
 		return 1, nil
 	}
 
-	// detects gen 2 OR 3 (i will try find a way to differentiate it)
+	// detects gen 2 OR 3 (THEY HAVE THE EXACT SAME RESOLUTION)
 	resp, err = http.Get(getURL(panoid, 26, 0, 5))
 
 	if err != nil {
