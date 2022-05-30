@@ -15,7 +15,7 @@ func getURL(panoid string, x, y, zoom int) string {
 }
 
 // returns 0, error if it returned an error.
-// for now, both gen 2 and gen 3 will return 2, nil (because they have the same x length)
+// both gen 2 and gen 3 will return 2, nil (because they have the same resolution)
 func GetGeneration(panoid string) (int, error) {
 	var resp *http.Response
 	var err error
@@ -42,7 +42,7 @@ func GetGeneration(panoid string) (int, error) {
 		return 1, nil
 	}
 
-	// detects gen 2 OR 3 (THEY HAVE THE EXACT SAME RESOLUTION)
+	// detects gen 2 and 3
 	resp, err = http.Get(getURL(panoid, 26, 0, 5))
 
 	if err != nil {
