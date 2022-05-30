@@ -24,6 +24,12 @@ func ShortlinkToPanoid(url string) (string, error){
 
 	finalURL := resp.Request.URL.String()
 
+	finalURLHasPrefix := strings.HasPrefix(finalURL, "https://www.google.com/maps/")
+
+	if !finalURLHasPrefix {
+		return "", InvalidSVURLError
+	}
+
 	var splitted []string
 
 	splitted = strings.Split(finalURL, "/data=!3m6!1e1!3m4!1s")
