@@ -97,6 +97,11 @@ func GetImages(panoid string) (*image.RGBA, error) {
 		},
 	})
 
+	totalIMG := config.yAmount * config.xAmount
+	imgHaveBeenCombined := 0
+
+	fmt.Printf("\n\rCombining images: %d/%d", imgHaveBeenCombined, totalIMG)
+
 	for y := 0; y < config.yAmount; y++ {
 		for x := 0; x < config.xAmount; x++ {
 			rectangle := image.Rectangle {
@@ -111,8 +116,11 @@ func GetImages(panoid string) (*image.RGBA, error) {
 			}
 
 			draw.Draw(combinedImage, rectangle, imagesYX[y][x], image.Point{0, 0}, draw.Src)
+			imgHaveBeenCombined++
+			fmt.Printf("\rCombining images: %d/%d", imgHaveBeenCombined, totalIMG)
 		}
 	}
+	fmt.Print("\n")
 	
 	return combinedImage, nil
 }
