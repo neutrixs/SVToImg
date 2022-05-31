@@ -13,6 +13,7 @@ func TestShortlinkToPanoid(t *testing.T) {
 
 	test("https://goo.gl/maps/v3V1nGaqSHuxHpF17", "jpmaYUuc5-QXvTD29Kz54A", nil)
 	test("https://goo.gl/maps/mQac1a9wFkt3QRHo7", "JSTF9BICkKl76cYXG5pQvQ", nil)
+	test("https://goo.gl/maps/Fgcz4tr1kPf86Uko6", "Zfh23J2FjPaNcohLhAaWrQ", nil)
 	test("random", "", InvalidURLError)
 	test("https://google.com/maps", "", InvalidSVURLError)
 	test("https://example.com/data=!3m6!1e1!3m4!1stest", "", InvalidSVURLError)

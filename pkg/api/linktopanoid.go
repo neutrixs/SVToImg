@@ -24,10 +24,9 @@ func ShortlinkToPanoid(url string) (string, error){
 	}
 
 	finalURL := resp.Request.URL.String()
+	domainRegex := regexp.MustCompile(`https:\/\/www\.google\..+\/maps\/`)
 
-	finalURLHasPrefix := strings.HasPrefix(finalURL, "https://www.google.com/maps/")
-
-	if !finalURLHasPrefix {
+	if !domainRegex.MatchString(finalURL) {
 		return "", InvalidSVURLError
 	}
 
