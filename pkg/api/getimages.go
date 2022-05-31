@@ -22,8 +22,6 @@ var EmptyImage *image.RGBA = image.NewRGBA(
 type EachgenData struct {
 	zoomLevel int
 	tileResolution int
-	tileLowerResolution int
-	resolutionLowersAtY [2]int
 	xAmount int
 	yAmount int
 }
@@ -32,16 +30,12 @@ var GenData = map[int]EachgenData {
 	1: {
 		zoomLevel: 3,
 		tileResolution: 512,
-		tileLowerResolution: 512,
-		resolutionLowersAtY: [2]int {0, 0},
 		xAmount: 6 + 1,
 		yAmount: 3 + 1,
 	},
 	2: {
 		zoomLevel: 5,
 		tileResolution: 512,
-		tileLowerResolution: 256,
-		resolutionLowersAtY: [2]int {3, 9},
 		xAmount: 25 + 1,
 		yAmount: 12 + 1,
 	},
@@ -49,8 +43,6 @@ var GenData = map[int]EachgenData {
 	4: {
 		zoomLevel: 5,
 		tileResolution: 512,
-		tileLowerResolution: 256,
-		resolutionLowersAtY: [2]int {4, 11},
 		xAmount: 31 + 1,
 		yAmount: 15 + 1,
 	},
