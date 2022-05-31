@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"image"
+	"image/draw"
 	_ "image/jpeg"
 	"log"
 	"net/http"
@@ -85,10 +86,35 @@ func GetImages(panoid string) (*image.RGBA, error) {
 	}
 
 	wg.Wait()
-	fmt.Println(imagesYX)
 
-	// FIXME: temporary
-	return EmptyImage, nil
+	// combines the images
+
+	combinedImage := image.NewRGBA(image.Rectangle {
+		Min: image.Point{0, 0},
+		Max: image.Point{
+			config.xAmount * config.tileResolution,
+			config.yAmount * config.tileResolution,
+		},
+	})
+
+	for y := 0; y < config.yAmount; y++ {
+		for x := 0; x < config.xAmount; x++ {
+			rectangle := image.Rectangle {
+				Min: image.Point {
+					x * config.tileResolution,
+					y * config.tileResolution,
+				},
+				Max: image.Point {
+					x * config.tileResolution + config.tileResolution,
+					y * config.tileResolution + config.tileResolution,
+				},
+			}
+
+			draw.Draw(combinedImage, rectangle, imagesYX[y][x], image.Point{0, 0}, draw.Src)
+		}
+	}
+	
+	return combinedImage, nil
 }
 
 func getImage(imagesYX *map[int]map[int]image.Image, wg *sync.WaitGroup, config EachgenData, panoid string, y, x, total int, downloaded *int) {
