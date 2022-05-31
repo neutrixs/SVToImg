@@ -58,8 +58,8 @@ func init() {
 }
 
 func GetImages(panoid string) (*image.RGBA, error) {
-	var imagesYX [][]image.Image
 	var wg sync.WaitGroup
+	imagesYX := make(map[int]map[int]image.Image)
 
 	gen, err := GetGeneration(panoid)
 
@@ -75,10 +75,10 @@ func GetImages(panoid string) (*image.RGBA, error) {
 	fmt.Print("\n")
 
 	for y := 0; y < config.yAmount; y++ {
-		imagesYX = append(imagesYX, []image.Image{})
+		imagesYX[y] = map[int]image.Image{}
 		for x := 0; x < config.xAmount; x++ {
 			wg.Add(1)
-			getImage(&imagesYX, &wg, panoid, y, x, config.zoomLevel, total, &downloaded)
+			go getImage(&imagesYX, &wg, panoid, y, x, config.zoomLevel, total, &downloaded)
 		}
 	}
 
@@ -89,7 +89,7 @@ func GetImages(panoid string) (*image.RGBA, error) {
 	return EmptyImage, nil
 }
 
-func getImage(imagesYX *[][]image.Image, wg *sync.WaitGroup, panoid string, y, x, zoom, total int, downloaded *int) {
+func getImage(imagesYX *map[int]map[int]image.Image, wg *sync.WaitGroup, panoid string, y, x, zoom, total int, downloaded *int) {
 	defer wg.Done()
 	defer func() {
 		*downloaded++
