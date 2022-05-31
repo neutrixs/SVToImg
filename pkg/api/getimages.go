@@ -95,7 +95,7 @@ func getImage(imagesYX *map[int]map[int]image.Image, wg *sync.WaitGroup, config 
 	defer wg.Done()
 	defer func() {
 		*downloaded++
-		fmt.Printf("\rDownloading images %d/%d", *downloaded, total)
+		fmt.Printf("\rDownloaded %d/%d images", *downloaded, total)
 	}()
 
 	baseURL := "https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=%v&x=%d&y=%d&zoom=%d&nbt=1&fover=2"
