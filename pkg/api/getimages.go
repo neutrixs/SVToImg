@@ -55,6 +55,7 @@ func init() {
 func GetImages(panoid string) (*image.RGBA, error) {
 	var wg sync.WaitGroup
 	imagesYX := make(map[int]map[int]image.Image)
+	errorChannel := make(chan error)
 
 	gen, err := GetGeneration(panoid)
 
@@ -73,11 +74,13 @@ func GetImages(panoid string) (*image.RGBA, error) {
 		imagesYX[y] = map[int]image.Image{}
 		for x := 0; x < config.xAmount; x++ {
 			wg.Add(1)
-			go getImage(&imagesYX, &wg, config, panoid, y, x, total, &downloaded)
+			go getImage(&imagesYX, &wg, config, panoid, y, x, total, &downloaded, errorChannel)
 		}
 	}
 
 	wg.Wait()
+	close(errorChannel)
+	returnedError := <- errorChannel
 
 	// combines the images
 
@@ -114,10 +117,10 @@ func GetImages(panoid string) (*image.RGBA, error) {
 	}
 	fmt.Print("\n")
 	
-	return combinedImage, nil
+	return combinedImage, returnedError
 }
 
-func getImage(imagesYX *map[int]map[int]image.Image, wg *sync.WaitGroup, config EachgenData, panoid string, y, x, total int, downloaded *int) {
+func getImage(imagesYX *map[int]map[int]image.Image, wg *sync.WaitGroup, config EachgenData, panoid string, y, x, total int, downloaded *int, c chan error) {
 	defer wg.Done()
 	defer func() {
 		*downloaded++
@@ -130,13 +133,15 @@ func getImage(imagesYX *map[int]map[int]image.Image, wg *sync.WaitGroup, config 
 	res, err := http.Get(URL)
 
 	if err != nil {
-		log.Fatalln(err)
+		c <- err
+		return
 	}
 
 	resImage, _, err := image.Decode(res.Body)
 
 	if err != nil {
-		log.Fatalln(err)
+		c <- err
+		return
 	}
 
 	imageWidth := resImage.Bounds().Dx()
