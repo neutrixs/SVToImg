@@ -6,6 +6,7 @@ import (
 	"image/jpeg"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/neutrixs/SVToImg/pkg/api"
@@ -56,10 +57,13 @@ func Run() int {
 	if err != nil {
 		log.Fatal(err)
 	}
-	
-	pathDirOnly := strings.Join((strings.Split(*output, "/")[:1]), "/")
 
-	err = os.MkdirAll(pathDirOnly, 0755)
+	wd, _ := os.Getwd()
+	splittedPath := strings.Split(*output, "/"); splittedPath = splittedPath[:len(splittedPath) - 1]
+	
+	pathDirOnly := strings.Join(splittedPath, "/")
+
+	err = os.MkdirAll(filepath.Join(wd, pathDirOnly), os.ModePerm)
 
 	if err != nil {
 		log.Fatal(err)
