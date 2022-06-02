@@ -57,6 +57,10 @@ func GetImages(panoid string) (*image.RGBA, error) {
 	imagesYX := make(map[int]map[int]image.Image)
 	errorChannel := make(chan error)
 
+	var setImagesYX = func(y, x int, content image.Image) {
+		imagesYX[y][x] = content
+	}
+
 	gen, err := GetGeneration(panoid)
 
 	if err != nil {
@@ -74,7 +78,7 @@ func GetImages(panoid string) (*image.RGBA, error) {
 		imagesYX[y] = map[int]image.Image{}
 		for x := 0; x < config.xAmount; x++ {
 			wg.Add(1)
-			go getImage(&imagesYX, &wg, config, panoid, y, x, total, &downloaded, errorChannel)
+			go getImage(setImagesYX, &wg, config, panoid, y, x, total, &downloaded, errorChannel)
 		}
 	}
 
@@ -120,7 +124,7 @@ func GetImages(panoid string) (*image.RGBA, error) {
 	return combinedImage, returnedError
 }
 
-func getImage(imagesYX *map[int]map[int]image.Image, wg *sync.WaitGroup, config EachgenData, panoid string, y, x, total int, downloaded *int, c chan error) {
+func getImage(setImagesYX func(y, x int, content image.Image), wg *sync.WaitGroup, config EachgenData, panoid string, y, x, total int, downloaded *int, c chan error) {
 	defer wg.Done()
 	defer func() {
 		*downloaded++
@@ -150,5 +154,5 @@ func getImage(imagesYX *map[int]map[int]image.Image, wg *sync.WaitGroup, config 
 		resImage = resize.Resize(uint(config.tileResolution), 0, resImage, resize.Lanczos3)
 	}
 
-	(*imagesYX)[y][x] = resImage
+	setImagesYX(y, x, resImage)
 }
